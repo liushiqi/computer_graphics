@@ -6,7 +6,6 @@
 #include <functional>
 #include <glad/gl.h>
 #include <map>
-#include <spdlog/fmt/ostr.h>
 
 namespace liu {
 enum class draw_mode {
@@ -76,7 +75,7 @@ public:
   static void inactive();
 
   static void activate_attribute(const liu::shader &shader, std::string attrib_name, int count, liu::array_type type,
-                          bool do_normalize, int stride, int offset);
+                                 bool do_normalize, int stride, int offset);
 
   static void draw(draw_mode mode, int from, int count);
 

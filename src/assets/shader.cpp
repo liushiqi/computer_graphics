@@ -1,5 +1,4 @@
 #include "assets/shader.h"
-#include "logger.h"
 #include <fstream>
 #include <iostream>
 

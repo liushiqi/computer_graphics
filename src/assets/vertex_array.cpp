@@ -79,7 +79,7 @@ void liu::vertex_array::inactive() { glBindVertexArray(0); }
 void liu::vertex_array::activate_attribute(const liu::shader &shader, std::string attrib_name, int count,
                                            liu::array_type type, bool do_normalize, int stride, int offset) {
   glVertexAttribPointer(shader.get_attribute_index(attrib_name), count, static_cast<GLenum>(type), do_normalize, stride,
-                        reinterpret_cast<GLvoid *>(offset));
+                        reinterpret_cast<GLvoid *>(static_cast<size_t>(offset)));
   glEnableVertexAttribArray(shader.get_attribute_index(attrib_name));
 }
 

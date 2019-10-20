@@ -1,8 +1,8 @@
 #pragma once
 
+#include "logger.h"
 #include <glad/gl.h>
 #include <vector>
-#include <spdlog/fmt/ostr.h>
 
 namespace liu {
 enum class buffer_target {

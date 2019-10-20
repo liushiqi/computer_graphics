@@ -1,9 +1,9 @@
 #pragma once
 
+#include "logger.h"
 #include <functional>
 #include <glad/gl.h>
 #include <map>
-#include <spdlog/fmt/ostr.h>
 #include <string>
 
 namespace liu {

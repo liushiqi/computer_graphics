@@ -4,15 +4,19 @@ project(computer_graphics)
 set(CMAKE_CXX_STANDARD 17)
 
 set(PROGRAM_SOURCES
-        src/main.cpp
-        src/logger.cpp
-        src/assets/shader.cpp
-        src/assets/vertex_buffer.cpp
-        src/assets/vertex_array.cpp
-        )
+	src/main.cpp
+	src/logger.cpp
+	src/assets/shader.cpp
+	src/assets/vertex_buffer.cpp
+	src/assets/vertex_array.cpp
+)
 
 add_executable(computer_graphics ${PROGRAM_SOURCES})
-target_compile_options(computer_graphics PUBLIC -Wall -Wextra)
+if(MSVC)
+	target_compile_options(computer_graphics INTERFACE -Wall)
+else()
+	target_compile_options(computer_graphics INTERFACE -Wall -Wextra)
+endif()
 target_include_directories(computer_graphics PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 set(GLAD_SOURCES_DIR "${PROJECT_SOURCE_DIR}/external/glad")
