@@ -46,6 +46,24 @@ enum class attribute_type {
 
 std::ostream &operator<<(std::ostream &out, const attribute_type &type);
 
+enum class array_type {
+  BYTE = GL_BYTE,
+  UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
+  SHORT = GL_SHORT,
+  UNSIGNED_SHORT = GL_UNSIGNED_SHORT,
+  INT = GL_INT,
+  UNSIGNED_INT = GL_UNSIGNED_INT,
+  HALF_FLOAT = GL_HALF_FLOAT,
+  FLOAT = GL_FLOAT,
+  DOUBLE = GL_DOUBLE,
+  FIXED = GL_FIXED,
+  INT_2_10_10_10_REV = GL_INT_2_10_10_10_REV,
+  UNSIGNED_INT_2_10_10_10_REV = GL_UNSIGNED_INT_2_10_10_10_REV,
+  UNSIGNED_INT_10F_11F_11F_REV = GL_UNSIGNED_INT_10F_11F_11F_REV,
+};
+
+std::ostream &operator<<(std::ostream &out, const array_type &type);
+
 class shader {
 private:
   GLuint program_id;
@@ -61,6 +79,8 @@ public:
   [[nodiscard]] unsigned int get_attribute_index(const std::string &attribute_name) const;
 
   [[nodiscard]] unsigned int get_uniform_index(const std::string &uniform_name) const;
+
+  void activate_attribute(std::string attrib_name, int count, liu::array_type type, bool do_normalize, int stride, int offset);
 
   void active() const;
 

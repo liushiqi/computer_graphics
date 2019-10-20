@@ -46,12 +46,10 @@ private:
 public:
   explicit vertex_buffer(buffer_target type);
 
-  template <class T, class InputIterator>
-  void bind_data(InputIterator begin, InputIterator end, liu::buffer_usage usage) {
+  template <class T, class InputIterator> void bind_data(InputIterator begin, InputIterator end, liu::buffer_usage usage) {
     std::vector<T> data;
     std::copy(begin, end, std::back_inserter(data));
-    glBufferData(static_cast<GLenum>(type), static_cast<GLsizeiptr>(data.size() * sizeof(T)), data.data(),
-                 static_cast<GLenum>(usage));
+    glBufferData(static_cast<GLenum>(type), static_cast<GLsizeiptr>(data.size() * sizeof(T)), data.data(), static_cast<GLenum>(usage));
   }
 };
 } // namespace liu

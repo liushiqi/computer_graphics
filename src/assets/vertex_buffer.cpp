@@ -1,9 +1,9 @@
 #include "assets/vertex_buffer.h"
 
 std::ostream &liu::operator<<(std::ostream &out, const buffer_target &type) {
-#define print_string(name)                                                                                             \
-  case name:                                                                                                           \
-    out << #name;                                                                                                      \
+#define print_string(name)                                                                                                                           \
+  case name:                                                                                                                                         \
+    out << #name;                                                                                                                                    \
     break
   switch (type) {
     print_string(liu::buffer_target::ARRAY_BUFFER);
@@ -26,9 +26,9 @@ std::ostream &liu::operator<<(std::ostream &out, const buffer_target &type) {
 }
 
 std::ostream &liu::operator<<(std::ostream &out, const buffer_usage &type) {
-#define print_string(name)                                                                                             \
-  case name:                                                                                                           \
-    out << #name;                                                                                                      \
+#define print_string(name)                                                                                                                           \
+  case name:                                                                                                                                         \
+    out << #name;                                                                                                                                    \
     break
   switch (type) {
     print_string(liu::buffer_usage::STREAM_DRAW);

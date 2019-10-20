@@ -3,9 +3,9 @@
 #include <iostream>
 
 std::ostream &liu::operator<<(std::ostream &out, const liu::attribute_type &type) {
-#define print_string(name)                                                                                             \
-  case name:                                                                                                           \
-    out << #name;                                                                                                      \
+#define print_string(name)                                                                                                                           \
+  case name:                                                                                                                                         \
+    out << #name;                                                                                                                                    \
     break
   switch (type) {
     print_string(liu::attribute_type::FLOAT);
@@ -47,18 +47,41 @@ std::ostream &liu::operator<<(std::ostream &out, const liu::attribute_type &type
 #undef print_string
 }
 
+std::ostream &liu::operator<<(std::ostream &out, const liu::array_type &type) {
+#define print_string(name)                                                                                                                           \
+  case name:                                                                                                                                         \
+    out << #name;                                                                                                                                    \
+    break
+  switch (type) {
+    print_string(liu::array_type::BYTE);
+    print_string(liu::array_type::UNSIGNED_BYTE);
+    print_string(liu::array_type::SHORT);
+    print_string(liu::array_type::UNSIGNED_SHORT);
+    print_string(liu::array_type::INT);
+    print_string(liu::array_type::UNSIGNED_INT);
+    print_string(liu::array_type::HALF_FLOAT);
+    print_string(liu::array_type::FLOAT);
+    print_string(liu::array_type::DOUBLE);
+    print_string(liu::array_type::FIXED);
+    print_string(liu::array_type::INT_2_10_10_10_REV);
+    print_string(liu::array_type::UNSIGNED_INT_2_10_10_10_REV);
+    print_string(liu::array_type::UNSIGNED_INT_10F_11F_11F_REV);
+  }
+  return out;
+#undef print_string
+}
+
 void liu::shader::build_indices() {
   unsigned attribute_count, attribute_max_length;
   glGetProgramiv(program_id, GL_ACTIVE_ATTRIBUTES, reinterpret_cast<GLint *>(&attribute_count));
   glGetProgramiv(program_id, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, reinterpret_cast<GLint *>(&attribute_max_length));
-  SPDLOG_TRACE("There are {} attributes in the program {}, maximum length is {}", attribute_count, name,
-               attribute_max_length);
+  SPDLOG_TRACE("There are {} attributes in the program {}, maximum length is {}", attribute_count, name, attribute_max_length);
   std::vector<char> attribute_name_vector(static_cast<std::vector<char>::size_type>(attribute_max_length) + 1);
   for (unsigned i = 0; i < attribute_count; i++) {
     int length, size;
     liu::attribute_type type;
-    glGetActiveAttrib(program_id, (GLuint)i, static_cast<GLsizei>(attribute_max_length), &length, &size,
-                      reinterpret_cast<GLenum *>(&type), attribute_name_vector.data());
+    glGetActiveAttrib(program_id, (GLuint)i, static_cast<GLsizei>(attribute_max_length), &length, &size, reinterpret_cast<GLenum *>(&type),
+                      attribute_name_vector.data());
     std::string attribute_name(attribute_name_vector.begin(), attribute_name_vector.begin() + length);
     attribute_indices[attribute_name] = i;
     SPDLOG_TRACE("Found attribute {}, type: {}, name: {} in program {}", i, type, attribute_name, name);
@@ -66,14 +89,13 @@ void liu::shader::build_indices() {
   unsigned uniform_count, uniform_max_length;
   glGetProgramiv(program_id, GL_ACTIVE_UNIFORMS, reinterpret_cast<GLint *>(&uniform_count));
   glGetProgramiv(program_id, GL_ACTIVE_UNIFORM_MAX_LENGTH, reinterpret_cast<GLint *>(&uniform_max_length));
-  SPDLOG_TRACE("There are {} attributes in the program {}, maximum length is {}", uniform_count, name,
-               uniform_max_length);
+  SPDLOG_TRACE("There are {} attributes in the program {}, maximum length is {}", uniform_count, name, uniform_max_length);
   std::vector<char> uniform_name_vector(static_cast<std::vector<char>::size_type>(uniform_max_length) + 1);
   for (unsigned i = 0; i < uniform_count; i++) {
     int length, size;
     liu::attribute_type type;
-    glGetActiveUniform(program_id, (GLuint)i, static_cast<GLsizei>(uniform_max_length), &length, &size,
-                       reinterpret_cast<GLenum *>(&type), uniform_name_vector.data());
+    glGetActiveUniform(program_id, (GLuint)i, static_cast<GLsizei>(uniform_max_length), &length, &size, reinterpret_cast<GLenum *>(&type),
+                       uniform_name_vector.data());
     std::string uniform_name(uniform_name_vector.begin(), uniform_name_vector.begin() + length);
     uniform_indices[uniform_name] = i;
     SPDLOG_TRACE("Found uniform {}, type: {}, name: {} in program {}", i, type, uniform_name, name);
@@ -111,7 +133,7 @@ liu::shader::shader(const std::string &asset_root_path, const std::string &name)
   glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &result);
   glGetShaderiv(vertex_shader_id, GL_INFO_LOG_LENGTH, &log_length);
   if (result != GL_TRUE) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length )+ 1ul);
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1ul);
     glGetShaderInfoLog(vertex_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     spdlog::critical("Vertex shader compile failed with error:\n{}", log);
@@ -194,6 +216,12 @@ unsigned int liu::shader::get_uniform_index(const std::string &uniform_name) con
     SPDLOG_CRITICAL("Requesting non-existing uniform {} in shader {}", uniform_name, name);
     throw std::runtime_error("Requesting non-existing uniform.");
   }
+}
+
+void liu::shader::activate_attribute(std::string attrib_name, int count, liu::array_type type, bool do_normalize, int stride, int offset) {
+  int index = this->get_attribute_index(attrib_name);
+  glVertexAttribPointer(index, count, static_cast<GLenum>(type), do_normalize, stride, reinterpret_cast<GLvoid *>(static_cast<size_t>(offset)));
+  glEnableVertexAttribArray(index);
 }
 
 void liu::shader::active() const { glUseProgram(program_id); }

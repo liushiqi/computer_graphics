@@ -10,9 +10,8 @@ std::string parse_arguments(int argc, char *argv[]) {
   std::string assets_path;
   boost::program_options::options_description options("A program for computer graphics class");
   try {
-    options.add_options()("help,h", "Display this help message.")(
-        "assets,a", boost::program_options::value<std::string>()->default_value("./assets"),
-        "the path to assets directory.");
+    options.add_options()("help,h", "Display this help message.")("assets,a", boost::program_options::value<std::string>()->default_value("./assets"),
+                                                                  "the path to assets directory.");
     boost::program_options::variables_map map;
     boost::program_options::store(boost::program_options::parse_command_line(argc, argv, options), map);
     boost::program_options::notify(map);
@@ -46,11 +45,10 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   glfwMakeContextCurrent(window);
-  glfwSetKeyCallback(
-      window, [](GLFWwindow *window, int key, [[maybe_unused]] int scan_code, int action, [[maybe_unused]] int mode) {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-          glfwSetWindowShouldClose(window, GL_TRUE);
-      });
+  glfwSetKeyCallback(window, [](GLFWwindow *window, int key, [[maybe_unused]] int scan_code, int action, [[maybe_unused]] int mode) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+      glfwSetWindowShouldClose(window, GL_TRUE);
+  });
 
   if (!gladLoadGL(glfwGetProcAddress)) {
     SPDLOG_CRITICAL("Failed to load OpenGL.");
@@ -67,13 +65,10 @@ int main(int argc, char *argv[]) {
   shader.apply([&]() {
     array.apply([&]() {
       array.add_buffer(liu::buffer_target::ARRAY_BUFFER);
-      array.bind_vertex_buffer<GLfloat>(liu::buffer_target::ARRAY_BUFFER, points.begin(), points.end(),
-                                        liu::buffer_usage::STATIC_DRAW);
+      array.bind_vertex_buffer<GLfloat>(liu::buffer_target::ARRAY_BUFFER, points.begin(), points.end(), liu::buffer_usage::STATIC_DRAW);
       array.add_buffer(liu::buffer_target::ELEMENT_ARRAY_BUFFER);
-      array.bind_vertex_buffer<GLint>(liu::buffer_target::ELEMENT_ARRAY_BUFFER, index.begin(), index.end(),
-                                      liu::buffer_usage::STATIC_DRAW);
-      liu::vertex_array::activate_attribute(shader, "position", 2, liu::array_type::FLOAT, false, 3 * sizeof(GLfloat),
-                                            0);
+      array.bind_vertex_buffer<GLint>(liu::buffer_target::ELEMENT_ARRAY_BUFFER, index.begin(), index.end(), liu::buffer_usage::STATIC_DRAW);
+      shader.activate_attribute("position", 2, liu::array_type::FLOAT, false, 3 * sizeof(GLfloat), 0);
     });
   });
 
@@ -81,9 +76,7 @@ int main(int argc, char *argv[]) {
     glfwPollEvents();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    shader.apply([&]() {
-      array.apply([&]() { array.draw_index(liu::draw_mode::TRIANGLES, 6, liu::index_type::UNSIGNED_INT); });
-    });
+    shader.apply([&]() { array.apply([&]() { array.draw_index(liu::draw_mode::TRIANGLES, 6, liu::index_type::UNSIGNED_INT); }); });
     glfwSwapBuffers(window);
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
