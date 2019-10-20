@@ -2,3 +2,6 @@
 	path = external/glad
 	url = https://github.com/Dav1dde/glad.git
 	branch = glad2
+[submodule "external/spdlog"]
+	path = external/spdlog
+	url = https://github.com/gabime/spdlog.git
