@@ -53,7 +53,7 @@ void liu::shader::build_indices() {
   glGetProgramiv(program_id, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, reinterpret_cast<GLint *>(&attribute_max_length));
   SPDLOG_TRACE("There are {} attributes in the program {}, maximum length is {}", attribute_count, name,
                attribute_max_length);
-  std::vector<char> attribute_name_vector(static_cast<std::vector<char>::size_type>(attribute_max_length + 1));
+  std::vector<char> attribute_name_vector(static_cast<std::vector<char>::size_type>(attribute_max_length) + 1);
   for (unsigned i = 0; i < attribute_count; i++) {
     int length, size;
     liu::attribute_type type;
@@ -68,7 +68,7 @@ void liu::shader::build_indices() {
   glGetProgramiv(program_id, GL_ACTIVE_UNIFORM_MAX_LENGTH, reinterpret_cast<GLint *>(&uniform_max_length));
   SPDLOG_TRACE("There are {} attributes in the program {}, maximum length is {}", uniform_count, name,
                uniform_max_length);
-  std::vector<char> uniform_name_vector(static_cast<std::vector<char>::size_type>(uniform_max_length + 1));
+  std::vector<char> uniform_name_vector(static_cast<std::vector<char>::size_type>(uniform_max_length) + 1);
   for (unsigned i = 0; i < uniform_count; i++) {
     int length, size;
     liu::attribute_type type;
@@ -111,13 +111,13 @@ liu::shader::shader(const std::string &asset_root_path, const std::string &name)
   glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &result);
   glGetShaderiv(vertex_shader_id, GL_INFO_LOG_LENGTH, &log_length);
   if (result != GL_TRUE) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length )+ 1ul);
     glGetShaderInfoLog(vertex_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     spdlog::critical("Vertex shader compile failed with error:\n{}", log);
     exit(1);
   } else if (log_length != 0) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1ul);
     glGetShaderInfoLog(vertex_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     SPDLOG_WARN("Vertex shader compile finished with warning:\n{}", log);
@@ -131,13 +131,13 @@ liu::shader::shader(const std::string &asset_root_path, const std::string &name)
   glGetShaderiv(fragment_shader_id, GL_COMPILE_STATUS, &result);
   glGetShaderiv(fragment_shader_id, GL_INFO_LOG_LENGTH, &log_length);
   if (result != GL_TRUE) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1ul);
     glGetShaderInfoLog(fragment_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     SPDLOG_CRITICAL("Fragment shader compile failed with error:\n{}", log);
     exit(1);
   } else if (log_length != 0) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1ul);
     glGetShaderInfoLog(fragment_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     SPDLOG_WARN("Fragment shader compile finished with warning:\n{}", log);
@@ -151,13 +151,13 @@ liu::shader::shader(const std::string &asset_root_path, const std::string &name)
   glGetProgramiv(program_id, GL_LINK_STATUS, &result);
   glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &log_length);
   if (result != GL_TRUE) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1);
     glGetProgramInfoLog(program_id, 1024, &log_length, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     SPDLOG_CRITICAL("Shader program link failed with error:\n{}", log);
     exit(1);
   } else if (log_length != 0) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1);
     glGetShaderInfoLog(fragment_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     SPDLOG_WARN("Shader program link finished with warning:\n{}", log);
