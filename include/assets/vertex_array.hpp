@@ -1,8 +1,8 @@
 #pragma once
 
-#include "assets/vertex_buffer.h"
-#include "logger.h"
-#include "shader.h"
+#include "assets/vertex_buffer.hpp"
+#include "logger.hpp"
+#include "shader.hpp"
 #include <functional>
 #include <glad/gl.h>
 #include <map>
@@ -34,24 +34,6 @@ enum class index_type {
 
 std::ostream &operator<<(std::ostream &out, const index_type &type);
 
-enum class array_type {
-  BYTE = GL_BYTE,
-  UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
-  SHORT = GL_SHORT,
-  UNSIGNED_SHORT = GL_UNSIGNED_SHORT,
-  INT = GL_INT,
-  UNSIGNED_INT = GL_UNSIGNED_INT,
-  HALF_FLOAT = GL_HALF_FLOAT,
-  FLOAT = GL_FLOAT,
-  DOUBLE = GL_DOUBLE,
-  FIXED = GL_FIXED,
-  INT_2_10_10_10_REV = GL_INT_2_10_10_10_REV,
-  UNSIGNED_INT_2_10_10_10_REV = GL_UNSIGNED_INT_2_10_10_10_REV,
-  UNSIGNED_INT_10F_11F_11F_REV = GL_UNSIGNED_INT_10F_11F_11F_REV,
-};
-
-std::ostream &operator<<(std::ostream &out, const array_type &type);
-
 class vertex_array {
 private:
   GLuint vertex_array_id;
@@ -64,9 +46,9 @@ public:
 
   template <class T, class InputIterator>
   void bind_vertex_buffer(buffer_target type, InputIterator begin, InputIterator end, liu::buffer_usage usage) {
-    if (buffers.count(type) == 1) {
+    try {
       buffers.at(type).bind_data<T, InputIterator>(begin, end, usage);
-    } else {
+    } catch (const std::out_of_range &e) {
       SPDLOG_WARN("Buffer with type {} used before creating.", type);
     }
   }
@@ -74,9 +56,6 @@ public:
   void active() const;
 
   static void inactive();
-
-  static void activate_attribute(const liu::shader &shader, std::string attrib_name, int count, liu::array_type type,
-                          bool do_normalize, int stride, int offset);
 
   static void draw(draw_mode mode, int from, int count);
 

@@ -1,10 +1,11 @@
-#include "assets/shader.h"
-#include "assets/vertex_array.h"
-#include "logger.h"
+#include "assets/shader.hpp"
+#include "assets/vertex_array.hpp"
+#include "logger.hpp"
 #include <GLFW/glfw3.h>
 #include <boost/program_options.hpp>
 #include <glad/gl.h>
 #include <iostream>
+#include <random>
 
 std::string parse_arguments(int argc, char *argv[]) {
   std::string assets_path;
@@ -30,9 +31,7 @@ std::string parse_arguments(int argc, char *argv[]) {
   return assets_path;
 }
 
-int main(int argc, char *argv[]) {
-  std::string assets_path = parse_arguments(argc, argv);
-  init_logger();
+void run(const std::string &assets_path) {
   glfwInit();
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -57,10 +56,9 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  std::vector<GLfloat> points{0.5f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f};
-  std::vector<GLint> index{0, 1, 3, 1, 2, 3};
-
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  std::vector<GLfloat> points{1.0f,  1.0f,  1.0f, 1.0f, 1.0f,  -1.0f, 1.0f, 0.0f,
+                              -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f,  0.0f, 1.0f};
+  std::vector<GLint> index{0, 1, 2, 0, 2, 3};
 
   liu::shader shader(assets_path, "default");
   liu::vertex_array array;
@@ -72,10 +70,23 @@ int main(int argc, char *argv[]) {
       array.add_buffer(liu::buffer_target::ELEMENT_ARRAY_BUFFER);
       array.bind_vertex_buffer<GLint>(liu::buffer_target::ELEMENT_ARRAY_BUFFER, index.begin(), index.end(),
                                       liu::buffer_usage::STATIC_DRAW);
-      liu::vertex_array::activate_attribute(shader, "position", 2, liu::array_type::FLOAT, false, 3 * sizeof(GLfloat),
-                                            0);
+      shader.activate_attribute("position", 2, liu::array_type::FLOAT, false, 4 * sizeof(GLfloat), 0);
+      shader.activate_attribute("coordinate", 2, liu::array_type::FLOAT, false, 4 * sizeof(GLfloat),
+                                2 * sizeof(GLfloat));
     });
   });
+
+  uint8_t texture[600 * 800 * 3];
+  std::random_device device;
+  std::uniform_int_distribution<uint8_t> uniform(0, 255);
+  GLuint texture_id;
+  glGenTextures(1, &texture_id);
+  glBindTexture(GL_TEXTURE_2D, texture_id);
+  std::generate(std::begin(texture), std::end(texture), [&]() -> uint8_t { return uniform(device); });
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 800, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+  glGenerateMipmap(GL_TEXTURE_2D);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
@@ -90,5 +101,15 @@ int main(int argc, char *argv[]) {
       SPDLOG_WARN("OpenGL catches an error: {}", error);
     }
   }
-  return 0;
+}
+
+int main(int argc, char *argv[]) {
+  std::string assets_path = parse_arguments(argc, argv);
+  init_logger();
+  try {
+    run(assets_path);
+  } catch (const std::exception &e) {
+    SPDLOG_CRITICAL("Exception caused: {}", e.what());
+  }
+  SPDLOG_INFO("Program exited.");
 }

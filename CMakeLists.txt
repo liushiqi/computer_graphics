@@ -9,7 +9,7 @@ set(PROGRAM_SOURCES
         src/assets/shader.cpp
         src/assets/vertex_buffer.cpp
         src/assets/vertex_array.cpp
-        )
+        src/assets/texture.cpp)
 
 add_executable(computer_graphics ${PROGRAM_SOURCES})
 target_compile_options(computer_graphics PUBLIC -Wall -Wextra)

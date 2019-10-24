@@ -1,4 +1,4 @@
-#include "assets/vertex_array.h"
+#include "assets/vertex_array.hpp"
 
 std::ostream &liu::operator<<(std::ostream &out, const draw_mode &type) {
 #define print_string(name)                                                                                             \
@@ -37,30 +37,6 @@ std::ostream &liu::operator<<(std::ostream &out, const index_type &type) {
 #undef print_string
 }
 
-std::ostream &liu::operator<<(std::ostream &out, const liu::array_type &type) {
-#define print_string(name)                                                                                             \
-  case name:                                                                                                           \
-    out << #name;                                                                                                      \
-    break
-  switch (type) {
-    print_string(liu::array_type::BYTE);
-    print_string(liu::array_type::UNSIGNED_BYTE);
-    print_string(liu::array_type::SHORT);
-    print_string(liu::array_type::UNSIGNED_SHORT);
-    print_string(liu::array_type::INT);
-    print_string(liu::array_type::UNSIGNED_INT);
-    print_string(liu::array_type::HALF_FLOAT);
-    print_string(liu::array_type::FLOAT);
-    print_string(liu::array_type::DOUBLE);
-    print_string(liu::array_type::FIXED);
-    print_string(liu::array_type::INT_2_10_10_10_REV);
-    print_string(liu::array_type::UNSIGNED_INT_2_10_10_10_REV);
-    print_string(liu::array_type::UNSIGNED_INT_10F_11F_11F_REV);
-  }
-  return out;
-#undef print_string
-}
-
 liu::vertex_array::vertex_array() : vertex_array_id(0) { glGenVertexArrays(1, &vertex_array_id); }
 
 void liu::vertex_array::add_buffer(liu::buffer_target target) {
@@ -75,13 +51,6 @@ void liu::vertex_array::add_buffer(liu::buffer_target target) {
 void liu::vertex_array::active() const { glBindVertexArray(vertex_array_id); }
 
 void liu::vertex_array::inactive() { glBindVertexArray(0); }
-
-void liu::vertex_array::activate_attribute(const liu::shader &shader, std::string attrib_name, int count,
-                                           liu::array_type type, bool do_normalize, int stride, int offset) {
-  glVertexAttribPointer(shader.get_attribute_index(attrib_name), count, static_cast<GLenum>(type), do_normalize, stride,
-                        reinterpret_cast<GLvoid *>(offset));
-  glEnableVertexAttribArray(shader.get_attribute_index(attrib_name));
-}
 
 void liu::vertex_array::draw(liu::draw_mode mode, int from, int count) {
   glDrawArrays(static_cast<GLenum>(mode), from, count);
