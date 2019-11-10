@@ -1,4 +1,14 @@
-#ifndef COMPUTER_GRAPHICS_TEXTURE_HPP
-#define COMPUTER_GRAPHICS_TEXTURE_HPP
+#pragma once
 
-#endif // COMPUTER_GRAPHICS_TEXTURE_HPP
+#include <cstdint>
+#include <glad/gl.h>
+
+namespace liu {
+class texture {
+private:
+  std::uint32_t texture_id;
+
+public:
+  texture();
+};
+} // namespace liu

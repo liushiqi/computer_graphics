@@ -1,9 +1,9 @@
 #include "assets/vertex_buffer.hpp"
 
 std::ostream &liu::operator<<(std::ostream &out, const buffer_target &type) {
-#define print_string(name)                                                                                             \
-  case name:                                                                                                           \
-    out << #name;                                                                                                      \
+#define print_string(name)                                                                                                                           \
+  case name:                                                                                                                                         \
+    out << #name;                                                                                                                                    \
     break
   switch (type) {
     print_string(liu::buffer_target::ARRAY_BUFFER);
@@ -26,9 +26,9 @@ std::ostream &liu::operator<<(std::ostream &out, const buffer_target &type) {
 }
 
 std::ostream &liu::operator<<(std::ostream &out, const buffer_usage &type) {
-#define print_string(name)                                                                                             \
-  case name:                                                                                                           \
-    out << #name;                                                                                                      \
+#define print_string(name)                                                                                                                           \
+  case name:                                                                                                                                         \
+    out << #name;                                                                                                                                    \
     break
   switch (type) {
     print_string(liu::buffer_usage::STREAM_DRAW);
@@ -47,5 +47,5 @@ std::ostream &liu::operator<<(std::ostream &out, const buffer_usage &type) {
 
 liu::vertex_buffer::vertex_buffer(liu::buffer_target type) : vertex_buffer_id(0), type(type) {
   glGenBuffers(1, &vertex_buffer_id);
-  glBindBuffer(static_cast<GLenum>(type), vertex_buffer_id);
+  glBindBuffer(static_cast<std::uint32_t>(type), vertex_buffer_id);
 }

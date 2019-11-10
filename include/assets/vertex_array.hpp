@@ -5,8 +5,8 @@
 #include "shader.hpp"
 #include <functional>
 #include <glad/gl.h>
+#include <iostream>
 #include <map>
-#include <spdlog/fmt/ostr.h>
 
 namespace liu {
 enum class draw_mode {
@@ -36,7 +36,7 @@ std::ostream &operator<<(std::ostream &out, const index_type &type);
 
 class vertex_array {
 private:
-  GLuint vertex_array_id;
+  std::uint32_t vertex_array_id;
   std::map<buffer_target, vertex_buffer> buffers;
 
 public:
@@ -49,7 +49,7 @@ public:
     try {
       buffers.at(type).bind_data<T, InputIterator>(begin, end, usage);
     } catch (const std::out_of_range &e) {
-      SPDLOG_WARN("Buffer with type {} used before creating.", type);
+      warn("Buffer with type {} used before creating.", type);
     }
   }
 

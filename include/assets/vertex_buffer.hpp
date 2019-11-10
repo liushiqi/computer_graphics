@@ -1,8 +1,9 @@
 #pragma once
 
+#include <cstdint>
 #include <glad/gl.h>
+#include <iostream>
 #include <vector>
-#include <spdlog/fmt/ostr.h>
 
 namespace liu {
 enum class buffer_target {
@@ -40,18 +41,17 @@ std::ostream &operator<<(std::ostream &out, const buffer_usage &type);
 
 class vertex_buffer {
 private:
-  GLuint vertex_buffer_id;
+  std::uint32_t vertex_buffer_id;
   buffer_target type;
 
 public:
   explicit vertex_buffer(buffer_target type);
 
-  template <class T, class InputIterator>
-  void bind_data(InputIterator begin, InputIterator end, liu::buffer_usage usage) {
+  template <class T, class InputIterator> void bind_data(InputIterator begin, InputIterator end, liu::buffer_usage usage) {
     std::vector<T> data;
     std::copy(begin, end, std::back_inserter(data));
-    glBufferData(static_cast<GLenum>(type), static_cast<GLsizeiptr>(data.size() * sizeof(T)), data.data(),
-                 static_cast<GLenum>(usage));
+    glBufferData(static_cast<std::uint32_t>(type), static_cast<std::intptr_t>(data.size() * sizeof(T)), data.data(),
+                 static_cast<std::uint32_t>(usage));
   }
 };
 } // namespace liu

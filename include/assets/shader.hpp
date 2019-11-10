@@ -1,14 +1,15 @@
 #pragma once
 
 #include "vertex_array.hpp"
+#include <cstdint>
 #include <functional>
 #include <glad/gl.h>
+#include <iostream>
 #include <map>
-#include <spdlog/fmt/ostr.h>
 #include <string>
 
 namespace liu {
-enum class attribute_type {
+enum class attribute_type : std::uint32_t {
   FLOAT = GL_FLOAT,
   FLOAT_VEC2 = GL_FLOAT_VEC2,
   FLOAT_VEC3 = GL_FLOAT_VEC3,
@@ -47,7 +48,7 @@ enum class attribute_type {
 
 std::ostream &operator<<(std::ostream &out, const attribute_type &type);
 
-enum class array_type {
+enum class array_type : std::uint32_t {
   BYTE = GL_BYTE,
   UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
   SHORT = GL_SHORT,
@@ -67,22 +68,21 @@ std::ostream &operator<<(std::ostream &out, const array_type &type);
 
 class shader {
 private:
-  GLuint program_id;
+  std::uint32_t program_id;
   std::string name;
-  std::map<std::string, GLint> attribute_indices;
-  std::map<std::string, GLint> uniform_indices;
+  std::map<std::string, std::int32_t> attribute_indices;
+  std::map<std::string, std::int32_t> uniform_indices;
 
   void build_indices();
 
 public:
   shader(const std::string &asset_root_path, const std::string &name);
 
-  [[nodiscard]] unsigned int get_attribute_index(const std::string &attribute_name) const;
+  [[nodiscard]] std::int32_t get_attribute_index(const std::string &attribute_name) const;
 
-  [[nodiscard]] unsigned int get_uniform_index(const std::string &uniform_name) const;
+  [[nodiscard]] std::int32_t get_uniform_index(const std::string &uniform_name) const;
 
-  void activate_attribute(const std::string &attrib_name, int count, liu::array_type type, bool do_normalize,
-                          int stride, int offset);
+  void activate_attribute(const std::string &attrib_name, int count, liu::array_type type, bool do_normalize, int stride, int offset);
 
   void active() const;
 
