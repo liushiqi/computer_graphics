@@ -14,7 +14,11 @@ set(PROGRAM_SOURCES
 set(EXTERNAL_DIRECTORY ${PROJECT_SOURCE_DIR}/external)
 
 add_executable(computer_graphics ${PROGRAM_SOURCES})
-target_compile_options(computer_graphics PUBLIC -Wall -Wextra)
+if(MSVC)
+    target_compile_options(computer_graphics INTERFACE -Wall)
+else()
+    target_compile_options(computer_graphics INTERFACE -Wall -Wextra)
+endif()
 target_include_directories(computer_graphics PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 set(GLAD_SOURCES_DIR "${EXTERNAL_DIRECTORY}/glad")
@@ -31,5 +35,5 @@ target_link_libraries(computer_graphics PUBLIC Boost::program_options)
 
 add_subdirectory("${EXTERNAL_DIRECTORY}/spdlog")
 spdlog_enable_warnings(computer_graphics)
-target_link_libraries(computer_graphics PRIVATE spdlog::spdlog)
+target_link_libraries(computer_graphics PUBLIC spdlog::spdlog)
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/logs")

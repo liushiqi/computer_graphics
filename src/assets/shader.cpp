@@ -1,5 +1,6 @@
 #include "assets/shader.hpp"
 #include "logger.hpp"
+#include "logger.hpp"
 #include <fstream>
 #include <iostream>
 
@@ -136,13 +137,13 @@ liu::shader::shader(const std::string &asset_root_path, const std::string &name)
   glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &result);
   glGetShaderiv(vertex_shader_id, GL_INFO_LOG_LENGTH, &log_length);
   if (result != GL_TRUE) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1ul);
     glGetShaderInfoLog(vertex_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     critical("Vertex shader compile failed with error:\n{}", log);
     exit(1);
   } else if (log_length != 0) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1ul);
     glGetShaderInfoLog(vertex_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     warn("Vertex shader compile finished with warning:\n{}", log);
@@ -156,13 +157,13 @@ liu::shader::shader(const std::string &asset_root_path, const std::string &name)
   glGetShaderiv(fragment_shader_id, GL_COMPILE_STATUS, &result);
   glGetShaderiv(fragment_shader_id, GL_INFO_LOG_LENGTH, &log_length);
   if (result != GL_TRUE) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1ul);
     glGetShaderInfoLog(fragment_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     critical("Fragment shader compile failed with error:\n{}", log);
     exit(1);
   } else if (log_length != 0) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1ul);
     glGetShaderInfoLog(fragment_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     warn("Fragment shader compile finished with warning:\n{}", log);
@@ -176,13 +177,13 @@ liu::shader::shader(const std::string &asset_root_path, const std::string &name)
   glGetProgramiv(program_id, GL_LINK_STATUS, &result);
   glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &log_length);
   if (result != GL_TRUE) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1);
     glGetProgramInfoLog(program_id, 1024, &log_length, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     critical("Shader program link failed with error:\n{}", log);
     exit(1);
   } else if (log_length != 0) {
-    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length + 1));
+    std::vector<char> log_content(static_cast<std::vector<char>::size_type>(log_length) + 1);
     glGetShaderInfoLog(fragment_shader_id, log_length, nullptr, log_content.data());
     std::string log(log_content.begin(), log_content.end());
     warn("Shader program link finished with warning:\n{}", log);
@@ -225,6 +226,12 @@ void liu::shader::activate_attribute(const std::string &attrib_name, int count, 
   glVertexAttribPointer(static_cast<std::uint32_t>(get_attribute_index(attrib_name)), count, static_cast<std::uint32_t>(type),
                         static_cast<std::uint8_t>(do_normalize), stride, reinterpret_cast<void *>(offset));
   glEnableVertexAttribArray(static_cast<std::uint32_t>(get_attribute_index(attrib_name)));
+}
+
+void liu::shader::activate_attribute(std::string attrib_name, int count, liu::array_type type, bool do_normalize, int stride, int offset) {
+  int index = this->get_attribute_index(attrib_name);
+  glVertexAttribPointer(index, count, static_cast<GLenum>(type), do_normalize, stride, reinterpret_cast<GLvoid *>(static_cast<size_t>(offset)));
+  glEnableVertexAttribArray(index);
 }
 
 void liu::shader::active() const { glUseProgram(program_id); }

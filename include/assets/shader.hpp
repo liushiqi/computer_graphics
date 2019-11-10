@@ -2,10 +2,12 @@
 
 #include "vertex_array.hpp"
 #include <cstdint>
+#include "logger.h"
 #include <functional>
 #include <glad/gl.h>
 #include <iostream>
 #include <map>
+#include <spdlog/fmt/ostr.h>
 #include <string>
 
 namespace liu {
