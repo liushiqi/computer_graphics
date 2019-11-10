@@ -14,11 +14,11 @@ set(PROGRAM_SOURCES
 set(EXTERNAL_DIRECTORY ${PROJECT_SOURCE_DIR}/external)
 
 add_executable(computer_graphics ${PROGRAM_SOURCES})
-if(MSVC)
+if (MSVC)
     target_compile_options(computer_graphics INTERFACE -Wall)
-else()
+else ()
     target_compile_options(computer_graphics INTERFACE -Wall -Wextra)
-endif()
+endif ()
 target_include_directories(computer_graphics PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 set(GLAD_SOURCES_DIR "${EXTERNAL_DIRECTORY}/glad")
@@ -30,8 +30,8 @@ add_subdirectory("${EXTERNAL_DIRECTORY}/glfw")
 target_include_directories(computer_graphics PUBLIC ${EXTERNAL_DIRECTORY}/glfw/include)
 target_link_libraries(computer_graphics PUBLIC glfw)
 
-find_package(Boost REQUIRED COMPONENTS program_options)
-target_link_libraries(computer_graphics PUBLIC Boost::program_options)
+add_subdirectory("${EXTERNAL_DIRECTORY}/cxxopts")
+target_link_libraries(computer_graphics PUBLIC cxxopts)
 
 add_subdirectory("${EXTERNAL_DIRECTORY}/spdlog")
 spdlog_enable_warnings(computer_graphics)
