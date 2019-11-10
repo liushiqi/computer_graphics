@@ -1,12 +1,12 @@
 #pragma once
 
-#include "assets/vertex_buffer.hpp"
-#include "logger.hpp"
-#include "shader.hpp"
+#include <assets/shader.hpp>
+#include <assets/vertex_buffer.hpp>
 #include <functional>
-#include <glad/gl.h>
 #include <iostream>
+#include <logger.hpp>
 #include <map>
+#include <opengl.hpp>
 
 namespace liu {
 enum class draw_mode {

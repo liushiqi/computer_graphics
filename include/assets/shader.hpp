@@ -1,13 +1,11 @@
 #pragma once
 
-#include "vertex_array.hpp"
 #include <cstdint>
-#include "logger.h"
 #include <functional>
-#include <glad/gl.h>
 #include <iostream>
+#include <logger.hpp>
 #include <map>
-#include <spdlog/fmt/ostr.h>
+#include <opengl.hpp>
 #include <string>
 
 namespace liu {

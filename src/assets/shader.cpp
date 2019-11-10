@@ -1,6 +1,4 @@
-#include "assets/shader.hpp"
-#include "logger.hpp"
-#include "logger.hpp"
+#include <assets/shader.hpp>
 #include <fstream>
 #include <iostream>
 
@@ -226,12 +224,6 @@ void liu::shader::activate_attribute(const std::string &attrib_name, int count, 
   glVertexAttribPointer(static_cast<std::uint32_t>(get_attribute_index(attrib_name)), count, static_cast<std::uint32_t>(type),
                         static_cast<std::uint8_t>(do_normalize), stride, reinterpret_cast<void *>(offset));
   glEnableVertexAttribArray(static_cast<std::uint32_t>(get_attribute_index(attrib_name)));
-}
-
-void liu::shader::activate_attribute(std::string attrib_name, int count, liu::array_type type, bool do_normalize, int stride, int offset) {
-  int index = this->get_attribute_index(attrib_name);
-  glVertexAttribPointer(index, count, static_cast<GLenum>(type), do_normalize, stride, reinterpret_cast<GLvoid *>(static_cast<size_t>(offset)));
-  glEnableVertexAttribArray(index);
 }
 
 void liu::shader::active() const { glUseProgram(program_id); }

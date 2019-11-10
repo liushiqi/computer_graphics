@@ -1,10 +1,8 @@
-#include "assets/shader.hpp"
-#include "assets/vertex_array.hpp"
-#include "logger.hpp"
-#include <GLFW/glfw3.h>
-#include <argument.hpp>
-#include <glad/gl.h>
+#include <assets/shader.hpp>
+#include <assets/vertex_array.hpp>
 #include <iostream>
+#include <logger.hpp>
+#include <opengl.hpp>
 #include <random>
 
 void run(const std::string &assets_path) {
@@ -71,6 +69,8 @@ void run(const std::string &assets_path) {
     }
   }
 }
+
+std::string parse_arguments(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) {
   std::string assets_path = parse_arguments(argc, argv);

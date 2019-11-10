@@ -1,4 +1,4 @@
-#include "assets/vertex_buffer.hpp"
+#include <assets/vertex_buffer.hpp>
 
 std::ostream &liu::operator<<(std::ostream &out, const buffer_target &type) {
 #define print_string(name)                                                                                                                           \

@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cstdint>
-#include <glad/gl.h>
 #include <iostream>
+#include <logger.hpp>
+#include <opengl.hpp>
 #include <vector>
 
 namespace liu {

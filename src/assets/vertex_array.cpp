@@ -1,4 +1,4 @@
-#include "assets/vertex_array.hpp"
+#include <assets/vertex_array.hpp>
 
 std::ostream &liu::operator<<(std::ostream &out, const draw_mode &type) {
 #define print_string(name)                                                                                                                           \

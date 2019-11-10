@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <glad/gl.h>
+#include <opengl.hpp>
 
 namespace liu {
 class texture {
