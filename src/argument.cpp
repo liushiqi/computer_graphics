@@ -1,4 +1,8 @@
+#ifdef _MSC_VER
+#pragma warning(disable : C4267)
+#else
 #pragma GCC diagnostic ignored "-Wconversion"
+#endif
 #include <cxxopts.hpp>
 #include <iostream>
 
