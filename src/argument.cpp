@@ -1,3 +1,4 @@
+#pragma GCC diagnostic ignored "-Wconversion"
 #include <cxxopts.hpp>
 #include <iostream>
 

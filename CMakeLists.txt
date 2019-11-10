@@ -9,7 +9,8 @@ set(PROGRAM_SOURCES
         src/assets/shader.cpp
         src/assets/vertex_buffer.cpp
         src/assets/vertex_array.cpp
-        src/assets/texture.cpp src/argument.cpp)
+        src/assets/texture.cpp
+        src/argument.cpp)
 
 set(EXTERNAL_DIRECTORY ${PROJECT_SOURCE_DIR}/external)
 
