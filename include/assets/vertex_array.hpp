@@ -48,7 +48,7 @@ public:
   void bind_vertex_buffer(buffer_target type, InputIterator begin, InputIterator end, liu::buffer_usage usage) {
     try {
       buffers.at(type).bind_data<T, InputIterator>(begin, end, usage);
-    } catch (const std::out_of_range &e) {
+    } catch ([[maybe_unused]] const std::out_of_range &e) {
       warn("Buffer with type {} used before creating.", type);
     }
   }

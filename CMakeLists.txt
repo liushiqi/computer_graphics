@@ -15,11 +15,11 @@ set(PROGRAM_SOURCES
 set(EXTERNAL_DIRECTORY ${PROJECT_SOURCE_DIR}/external)
 
 add_executable(computer_graphics ${PROGRAM_SOURCES})
-if (MSVC)
-    target_compile_options(computer_graphics INTERFACE -Wall)
-else ()
+if(MSVC)
+    target_compile_options(computer_graphics INTERFACE /W4)
+else()
     target_compile_options(computer_graphics INTERFACE -Wall -Wextra)
-endif ()
+endif()
 target_include_directories(computer_graphics PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 set(GLAD_SOURCES_DIR "${EXTERNAL_DIRECTORY}/glad")

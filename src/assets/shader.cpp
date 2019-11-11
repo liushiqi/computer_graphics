@@ -76,7 +76,7 @@ void liu::shader::build_indices() {
   glGetProgramiv(program_id, GL_ACTIVE_ATTRIBUTES, reinterpret_cast<std::int32_t *>(&attribute_count));
   glGetProgramiv(program_id, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, reinterpret_cast<std::int32_t *>(&attribute_max_length));
   trace("There are {} attributes in the program {}, maximum length is {}", attribute_count, name, attribute_max_length);
-  std::vector<char> attribute_name_vector(static_cast<std::vector<char>::size_type>(attribute_max_length + 1));
+  std::vector<char> attribute_name_vector(static_cast<std::vector<char>::size_type>(attribute_max_length) + 1);
   for (unsigned i = 0; i < attribute_count; i++) {
     std::int32_t length, size;
     liu::attribute_type type;
@@ -91,7 +91,7 @@ void liu::shader::build_indices() {
   glGetProgramiv(program_id, GL_ACTIVE_UNIFORMS, reinterpret_cast<std::int32_t *>(&uniform_count));
   glGetProgramiv(program_id, GL_ACTIVE_UNIFORM_MAX_LENGTH, reinterpret_cast<std::int32_t *>(&uniform_max_length));
   SPDLOG_TRACE("There are {} attributes in the program {}, maximum length is {}", uniform_count, name, uniform_max_length);
-  std::vector<char> uniform_name_vector(static_cast<std::vector<char>::size_type>(uniform_max_length + 1));
+  std::vector<char> uniform_name_vector(static_cast<std::vector<char>::size_type>(uniform_max_length) + 1);
   for (unsigned i = 0; i < uniform_count; i++) {
     std::int32_t length, size;
     liu::attribute_type type;
@@ -222,7 +222,7 @@ std::int32_t liu::shader::get_uniform_index(const std::string &uniform_name) con
 
 void liu::shader::activate_attribute(const std::string &attrib_name, int count, liu::array_type type, bool do_normalize, int stride, int offset) {
   glVertexAttribPointer(static_cast<std::uint32_t>(get_attribute_index(attrib_name)), count, static_cast<std::uint32_t>(type),
-                        static_cast<std::uint8_t>(do_normalize), stride, reinterpret_cast<void *>(offset));
+                        static_cast<std::uint8_t>(do_normalize), stride, reinterpret_cast<void *>(static_cast<std::size_t>(offset)));
   glEnableVertexAttribArray(static_cast<std::uint32_t>(get_attribute_index(attrib_name)));
 }
 

@@ -45,14 +45,15 @@ void run(const std::string &assets_path) {
     });
   });
 
-  uint8_t texture[600 * 800 * 3];
+  std::vector<uint8_t> texture;
+  texture.resize(600 * 800 * 3);
   std::random_device device;
-  std::uniform_int_distribution<uint8_t> uniform(0, 255);
+  std::uniform_int_distribution<uint32_t> uniform(0, 255);
   std::uint32_t texture_id;
   glGenTextures(1, &texture_id);
   glBindTexture(GL_TEXTURE_2D, texture_id);
-  std::generate(std::begin(texture), std::end(texture), [&]() -> uint8_t { return uniform(device); });
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 800, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+  std::generate(std::begin(texture), std::end(texture), [&]() -> uint8_t { return static_cast<uint8_t>(uniform(device)); });
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 800, 0, GL_RGB, GL_UNSIGNED_BYTE, texture.data());
   glGenerateMipmap(GL_TEXTURE_2D);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);

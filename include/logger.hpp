@@ -9,10 +9,18 @@
 #define SPDLOG_FUNCTION __PRETTY_FUNCTION__
 #endif
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 26812)
+#pragma warning(disable : 26495)
+#endif
 // clang-format off
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 // clang-format on
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #define trace(...) SPDLOG_TRACE(__VA_ARGS__)
 #define debug(...) SPDLOG_DEBUG(__VA_ARGS__)

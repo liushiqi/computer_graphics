@@ -1,10 +1,19 @@
 #ifdef _MSC_VER
-#pragma warning(disable : C4267)
+#pragma warning(push)
+#pragma warning(disable : 4267)
+#pragma warning(disable : 4819)
+#pragma warning(disable : 26444)
 #else
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
 #endif
 #include <cxxopts.hpp>
 #include <iostream>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#else
+#pragma GCC diagnostic pop
+#endif
 
 std::string parse_arguments(int argc, char *argv[]) {
   std::string assets_path;
